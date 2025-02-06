@@ -3,3 +3,5 @@ openpyxl
 matplotlib
 unidecode
 seaborn
+scikit-learn
+xlrd
