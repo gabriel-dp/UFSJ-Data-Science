@@ -1,0 +1,10 @@
+pandas
+openpyxl
+matplotlib
+unidecode
+seaborn
+scikit-learn
+xlrd
+streamlit
+folium
+streamlit_folium
