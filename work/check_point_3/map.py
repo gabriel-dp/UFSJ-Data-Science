@@ -5,8 +5,10 @@ MAP_JSON_PATH = '../data/br_states.json'
 def generate_map (name, data, columns, fill_color, legend_name): 
     # Initial map setup
     map = folium.Map(
-        location=[-15.77972, -47.92972],
-        zoom_start=3
+        location=[-15.795771, -50.524646],
+        zoom_start=4,
+        min_zoom=4,
+        max_zoom=7,
     )
 
     # Map data

@@ -1,13 +1,15 @@
+import pandas as pd
 import streamlit as st
 from streamlit_folium import st_folium
 
 from data_infractions import get_infractions_data
-from data_vehicles import get_vehicles_data
 from data_population import get_population_data
+from data_vehicles import get_vehicles_data
+from plot import generate_plot
 from map import generate_map
 
 
-st.title("Análise de trânsito no Brasil")
+st.title("Análise de Trânsito no Brasil")
 st.subheader("Tecnologias para Data Science")
 
 
@@ -36,6 +38,9 @@ data = get_all_data()
 ###
 
 
+st.markdown("---")
+
+
 ### Select map
 st.write("Selecione o mapa:")
 
@@ -53,10 +58,10 @@ def select_button(button_name):
 if "selected" not in st.session_state:
     st.session_state.selected = 'population'
 
-cols = st.columns(len(MAP_OPTIONS))
-for col, (key, label) in zip(cols, MAP_OPTIONS.items()):
+button_cols = st.columns(len(MAP_OPTIONS))
+for col, (key, label) in zip(button_cols, MAP_OPTIONS.items()):
     with col:
-        st.button(label, on_click=select_button, args=(key,), disabled=st.session_state.selected == key)
+        st.button(label, on_click=select_button, args=(key,), disabled=st.session_state.selected == key)  
 ###
 
 
@@ -80,11 +85,34 @@ selected_year = st.slider(
 ###
 
 
+st.markdown("---")
+
+
 # Filter data for the year
 data_filtered = data[st.session_state.selected]
 data_filtered = data_filtered[data_filtered['year'] == selected_year]
 
 
 # Render the map
+st.subheader(f"{MAP_OPTIONS[st.session_state.selected]} ({selected_year})")
 map_obj = generate_map("Mapa Brasil", data_filtered, ['state', 'quantity'], 'YlOrRd', MAP_OPTIONS[st.session_state.selected])
 st_data = st_folium(map_obj, width='100%', height=600, returned_objects=[])
+
+
+statistics = {
+    f"Mínimo ({data_filtered.loc[data_filtered['quantity'].idxmin(), 'state']})": [f"{data_filtered['quantity'].min():,}"],
+    "Média": [f"{data_filtered['quantity'].mean():,.2f}"],
+    f"Máximo ({data_filtered.loc[data_filtered['quantity'].idxmax(), 'state']})": [f"{data_filtered['quantity'].max():,}"],
+}
+df_statistics = pd.DataFrame(statistics)
+html_table = df_statistics.style.hide(axis="index")\
+    .set_table_attributes('style="width:100%;"')\
+    .to_html()
+st.markdown(html_table, unsafe_allow_html=True)
+
+
+st.pyplot(generate_plot(data_filtered, 'state', 'quantity', 'UF', 'Quantidade'))
+
+
+st.markdown("---")
+
