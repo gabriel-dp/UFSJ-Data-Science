@@ -1,6 +1,8 @@
+import os
 import folium
 
-MAP_JSON_PATH = '../data/br_states.json'
+PATH = os.environ.get("PATH_DATA", "..")
+MAP_JSON_PATH = f"{PATH}/data/br_states.json"
 
 def generate_map (name, data, columns, fill_color, legend_name): 
     # Initial map setup

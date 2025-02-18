@@ -1,6 +1,8 @@
+import os
 import pandas as pd
 
-POPULATION_CSV_PATH = '../data/populacao/br_ibge_populacao_municipio.csv'
+PATH = os.environ.get("PATH_DATA", "..")
+POPULATION_CSV_PATH = f"{PATH}/data/populacao/br_ibge_populacao_municipio.csv"
 
 def get_population_data():
     df = pd.read_csv(POPULATION_CSV_PATH)

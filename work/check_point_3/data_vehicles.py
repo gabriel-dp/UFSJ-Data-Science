@@ -1,7 +1,9 @@
+import os
 import pandas as pd
 
 def get_files():
-    FOLDER = "../data/frota"
+    PATH = os.environ.get("PATH_DATA", "..")
+    FOLDER = f"{PATH}/data/frota"
     PREFIX = "frota_"
     SUFFIX = ""
     EXTENSION = "xls"

@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from unidecode import unidecode
 
@@ -32,7 +33,8 @@ UF_REVERSE = {
 }
 
 def get_files():
-    FOLDER = "../data/infracoes"
+    PATH = os.environ.get("PATH_DATA", "..")
+    FOLDER = f"{PATH}/data/infracoes"
     PREFIX = "infracoes_"
     SUFFIX = ""
     EXTENSION = "csv"
